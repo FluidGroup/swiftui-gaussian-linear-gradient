@@ -1,14 +1,16 @@
 # GaussianLinearGradient
 
-A SwiftUI `LinearGradient` wrapper that approximates the opacity ramp of a Gaussian-blurred hard edge.
+A SwiftUI `LinearGradient` wrapper that approximates the color ramp of a Gaussian-blurred hard edge.
+
+<img src="Docs/gaussian-gradient-short-comparison.png" alt="LinearGradient and GaussianLinearGradient comparison with short gradient lengths" width="760">
 
 ```swift
 import GaussianLinearGradient
 import SwiftUI
 
 GaussianLinearGradient(
-  color: .black,
-  transparentAtStart: false,
+  startColor: .clear,
+  endColor: .blue,
   startPoint: .bottom,
   endPoint: .top,
   sampleCount: 24,
@@ -17,9 +19,23 @@ GaussianLinearGradient(
 .frame(height: 72)
 ```
 
+`GaussianLinearGradient` also conforms to `ShapeStyle`, so you can use it wherever SwiftUI accepts a style:
+
+```swift
+RoundedRectangle(cornerRadius: 12)
+  .fill(
+    GaussianLinearGradient(
+      startColor: .clear,
+      endColor: .blue,
+      startPoint: .leading,
+      endPoint: .trailing
+    )
+  )
+```
+
 ## Stops
 
-Use `GaussianLinearGradient.stops(...)` when you want to build your own `LinearGradient`:
+Use `GaussianLinearGradient.stops(...)` when you want to build your own opacity-ramp `LinearGradient` without resolving colors from the environment:
 
 ```swift
 LinearGradient(
