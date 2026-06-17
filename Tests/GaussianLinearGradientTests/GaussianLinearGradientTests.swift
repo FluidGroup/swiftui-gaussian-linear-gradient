@@ -56,6 +56,44 @@ func colorStopsInterpolateResolvedStartAndEndColors() {
 }
 
 @Test
+func colorStopsSupportThreeOrMoreResolvedColors() {
+  let red = Color.Resolved(
+    colorSpace: .sRGBLinear,
+    red: 1,
+    green: 0,
+    blue: 0,
+    opacity: 1
+  )
+  let green = Color.Resolved(
+    colorSpace: .sRGBLinear,
+    red: 0,
+    green: 1,
+    blue: 0,
+    opacity: 1
+  )
+  let blue = Color.Resolved(
+    colorSpace: .sRGBLinear,
+    red: 0,
+    green: 0,
+    blue: 1,
+    opacity: 1
+  )
+
+  let stops = GaussianLinearGradient.stops(
+    colors: [red, green, blue],
+    sampleCount: 3
+  )
+
+  let middle = stops[2].color.resolve(in: EnvironmentValues())
+
+  #expect(stops.count == 5)
+  #expect(stops.map(\.location) == [0, 0.25, 0.5, 0.75, 1])
+  #expect(abs(middle.linearRed - 0) < 0.0001)
+  #expect(abs(middle.linearGreen - 1) < 0.0001)
+  #expect(abs(middle.linearBlue - 0) < 0.0001)
+}
+
+@Test
 func gaussianLinearGradientCanBeUsedAsShapeStyle() {
   let style = GaussianLinearGradient(
     startColor: .clear,
@@ -70,6 +108,33 @@ func gaussianLinearGradientCanBeUsedAsShapeStyle() {
   _ = Rectangle().fill(style)
 
   #expect(type(of: resolved) == LinearGradient.self)
+}
+
+@Test
+func linearGradientStyleInitializersAcceptMultipleColorsAndStops() {
+  let colorsStyle = GaussianLinearGradient(
+    colors: [.red, .green, .blue],
+    startPoint: .leading,
+    endPoint: .trailing
+  )
+  let stopsStyle = GaussianLinearGradient(
+    stops: [
+      Gradient.Stop(color: .red, location: 0),
+      Gradient.Stop(color: .green, location: 0.35),
+      Gradient.Stop(color: .blue, location: 1),
+    ],
+    startPoint: .leading,
+    endPoint: .trailing
+  )
+  let gradientStyle = GaussianLinearGradient(
+    gradient: Gradient(colors: [.red, .green, .blue]),
+    startPoint: .top,
+    endPoint: .bottom
+  )
+
+  _ = AnyShapeStyle(colorsStyle)
+  _ = AnyShapeStyle(stopsStyle)
+  _ = Rectangle().fill(gradientStyle)
 }
 
 @Test

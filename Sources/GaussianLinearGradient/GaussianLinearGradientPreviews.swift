@@ -12,10 +12,11 @@ import SwiftUI
 private struct GaussianLinearGradientComparisonPreview: View {
 
   private let ramps: [PreviewRamp] = [
-    PreviewRamp(title: "clear -> blue", startColor: .clear, endColor: .blue),
-    PreviewRamp(title: "pink -> orange", startColor: .pink, endColor: .orange),
-    PreviewRamp(title: "mint -> indigo", startColor: .mint, endColor: .indigo),
-    PreviewRamp(title: "black -> clear", startColor: .black, endColor: .clear),
+    PreviewRamp(title: "clear -> blue", colors: [.clear, .blue]),
+    PreviewRamp(title: "pink -> orange", colors: [.pink, .orange]),
+    PreviewRamp(title: "red -> yellow -> blue", colors: [.red, .yellow, .blue]),
+    PreviewRamp(title: "mint -> cyan -> indigo", colors: [.mint, .cyan, .indigo]),
+    PreviewRamp(title: "black -> clear", colors: [.black, .clear]),
   ]
 
   var body: some View {
@@ -48,8 +49,7 @@ private struct GaussianLinearGradientShapeStylePreview: View {
       RoundedRectangle(cornerRadius: 18)
         .fill(
           GaussianLinearGradient(
-            startColor: .clear,
-            endColor: .indigo,
+            colors: [.clear, .blue, .indigo],
             startPoint: .leading,
             endPoint: .trailing
           )
@@ -59,8 +59,7 @@ private struct GaussianLinearGradientShapeStylePreview: View {
       Circle()
         .fill(
           GaussianLinearGradient(
-            startColor: .pink,
-            endColor: .orange,
+            colors: [.pink, .orange, .yellow],
             startPoint: .topLeading,
             endPoint: .bottomTrailing
           )
@@ -101,7 +100,7 @@ private struct ComparisonRow: View {
       HStack(alignment: .top, spacing: 16) {
         GradientSwatch(title: "LinearGradient") {
           LinearGradient(
-            colors: [ramp.startColor, ramp.endColor],
+            colors: ramp.colors,
             startPoint: .leading,
             endPoint: .trailing
           )
@@ -109,8 +108,7 @@ private struct ComparisonRow: View {
 
         GradientSwatch(title: "GaussianLinearGradient") {
           GaussianLinearGradient(
-            startColor: ramp.startColor,
-            endColor: ramp.endColor,
+            colors: ramp.colors,
             startPoint: .leading,
             endPoint: .trailing
           )
@@ -145,8 +143,7 @@ private struct GradientSwatch<Content: View>: View {
 private struct PreviewRamp: Identifiable {
 
   let title: String
-  let startColor: Color
-  let endColor: Color
+  let colors: [Color]
 
   var id: String {
     title

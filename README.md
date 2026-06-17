@@ -1,6 +1,6 @@
 # GaussianLinearGradient
 
-A SwiftUI `LinearGradient` wrapper that approximates the color ramp of a Gaussian-blurred hard edge.
+A SwiftUI `LinearGradient` wrapper that approximates Gaussian-blurred color transitions.
 
 <img src="Docs/gaussian-gradient-short-comparison.png" alt="LinearGradient and GaussianLinearGradient comparison with short gradient lengths" width="760">
 
@@ -9,8 +9,7 @@ import GaussianLinearGradient
 import SwiftUI
 
 GaussianLinearGradient(
-  startColor: .clear,
-  endColor: .blue,
+  colors: [.clear, .blue, .indigo],
   startPoint: .bottom,
   endPoint: .top,
   sampleCount: 24,
@@ -25,12 +24,37 @@ GaussianLinearGradient(
 RoundedRectangle(cornerRadius: 12)
   .fill(
     GaussianLinearGradient(
-      startColor: .clear,
-      endColor: .blue,
+      colors: [.clear, .blue, .indigo],
       startPoint: .leading,
       endPoint: .trailing
     )
   )
+```
+
+The main initializers mirror SwiftUI's `LinearGradient`:
+
+```swift
+GaussianLinearGradient(
+  gradient: Gradient(colors: [.red, .yellow, .blue]),
+  startPoint: .leading,
+  endPoint: .trailing
+)
+
+GaussianLinearGradient(
+  colors: [.red, .yellow, .blue],
+  startPoint: .leading,
+  endPoint: .trailing
+)
+
+GaussianLinearGradient(
+  stops: [
+    Gradient.Stop(color: .red, location: 0),
+    Gradient.Stop(color: .yellow, location: 0.35),
+    Gradient.Stop(color: .blue, location: 1),
+  ],
+  startPoint: .leading,
+  endPoint: .trailing
+)
 ```
 
 ## Stops
